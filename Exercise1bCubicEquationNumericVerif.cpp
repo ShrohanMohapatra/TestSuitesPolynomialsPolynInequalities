@@ -1,5 +1,7 @@
 // Exercise1bCubicEquationNumericVerif.cpp
 
+#include<iostream>
+#include<random>
 #include<cassert>
 #include<cmath>
 
@@ -18,6 +20,34 @@ customComplex squareComplex(customComplex inputComplex){
     returnSquareComplex.realPart = x*x - y*y;
     returnSquareComplex.imagPart = 2*x*y;
     return returnSquareComplex;
+}
+
+customComplex squareRootComplex(customComplex inputComplex){
+    long double x, y;
+    customComplex returnSquareComplex;
+    x = inputComplex.realPart;
+    y = inputComplex.imagPart;
+    returnSquareComplex.realPart = sqrt(1.0000/2.0000*(sqrt(x*x + y*y) + x));
+    returnSquareComplex.imagPart = sqrt(1.0000/2.0000*(sqrt(x*x + y*y) - x));
+    return returnSquareComplex;
+}
+
+customComplex cubeComplex(customComplex inputComplex){
+    long double x, y;
+    customComplex zCube;
+    x = inputComplex.realPart;
+    y = inputComplex.imagPart;
+    zCube.realPart = x*(x*x - 3*y*y);
+    zCube.imagPart = y*(3*x*x - y*y);
+    return zCube;
+}
+
+customComplex numericalCubeRootComplex(customComplex inputComplex){
+    long double xA, yA, xCubeRoot, yCubeRoot;
+    customComplex zCubeRoot;
+    xA = inputComplex.realPart;
+    yA = inputComplex.imagPart;
+    
 }
 
 void squareComplexExample1(){
@@ -48,8 +78,172 @@ void squareComplexExample2(){
     assert(fabs(ySq - 1.0000) < powf(10.0000, -15.0000));
 }
 
+void squareComplexExample3(){
+    long double x, y, xSq, ySq;
+    x = 3.0000;
+    y = 2.0000;
+    customComplex z, zSq;
+    z.realPart = x;
+    z.imagPart = y;
+    zSq = squareComplex(z);
+    xSq = zSq.realPart;
+    ySq = zSq.imagPart;
+    long double errorTolerance = powf(10.0000, -16.0000);
+    assert(fabs(xSq - 5.0000) < errorTolerance);
+    assert(fabs(ySq - 12.0000) < errorTolerance);
+}
+
+void squareComplexExample4(){
+    long double x, y, xSq, ySq;
+    x = 4.0000;
+    y = 3.0000;
+    customComplex z, zSq;
+    z.realPart = x;
+    z.imagPart = y;
+    zSq = squareComplex(z);
+    xSq = zSq.realPart;
+    ySq = zSq.imagPart;
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(xSq - 7.0000) < errorTolerance);
+    assert(fabs(ySq - 24.0000) < errorTolerance);
+}
+
+void squareRootExample1(){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> uniformDistrib(0.0001, 100.0000);
+    long double x, y, xSquare, ySquare, xExtract, yExtract;
+    x = -50.0000 + uniformDistrib(gen);
+    y = -50.0000 + uniformDistrib(gen);
+    customComplex z, zSquare, SquareRootOfzSquare;
+    z.realPart = x;
+    z.imagPart = y;
+    zSquare = squareComplex(z);
+    SquareRootOfzSquare = squareRootComplex(zSquare);
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(SquareRootOfzSquare.realPart-x) < errorTolerance);
+    assert(fabs(SquareRootOfzSquare.imagPart-y) < errorTolerance);
+}
+
+void squareRootExample2(){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> uniformDistrib(0.0001, 100.0000);
+    long double x, y, xSquare, ySquare, xExtract, yExtract;
+    x = -50.0000 + uniformDistrib(gen);
+    y = -50.0000 + uniformDistrib(gen);
+    customComplex z, zSquare, SquareRootOfzSquare;
+    z.realPart = x;
+    z.imagPart = y;
+    zSquare = squareComplex(z);
+    SquareRootOfzSquare = squareRootComplex(zSquare);
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(SquareRootOfzSquare.realPart-x) < errorTolerance);
+    assert(fabs(SquareRootOfzSquare.imagPart-y) < errorTolerance);
+}
+
+void squareRootExample3(){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> uniformDistrib(0.0001, 100.0000);
+    long double x, y, xSquare, ySquare, xExtract, yExtract;
+    x = -50.0000 + uniformDistrib(gen);
+    y = -50.0000 + uniformDistrib(gen);
+    customComplex z, zSquare, SquareRootOfzSquare;
+    z.realPart = x;
+    z.imagPart = y;
+    zSquare = squareComplex(z);
+    SquareRootOfzSquare = squareRootComplex(zSquare);
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(SquareRootOfzSquare.realPart-x) < errorTolerance);
+    assert(fabs(SquareRootOfzSquare.imagPart-y) < errorTolerance);
+}
+
+void squareRootExample4(){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> uniformDistrib(0.0001, 100.0000);
+    long double x, y, xSquare, ySquare, xExtract, yExtract;
+    x = -50.0000 + uniformDistrib(gen);
+    y = -50.0000 + uniformDistrib(gen);
+    customComplex z, zSquare, SquareRootOfzSquare;
+    z.realPart = x;
+    z.imagPart = y;
+    zSquare = squareComplex(z);
+    SquareRootOfzSquare = squareRootComplex(zSquare);
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(SquareRootOfzSquare.realPart-x) < errorTolerance);
+    assert(fabs(SquareRootOfzSquare.imagPart-y) < errorTolerance);
+}
+
+void squareRootExample5(){
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_real_distribution<> uniformDistrib(0.0001, 100.0000);
+    long double x, y, xSquare, ySquare, xExtract, yExtract;
+    x = -50.0000 + uniformDistrib(gen);
+    y = -50.0000 + uniformDistrib(gen);
+    customComplex z, zSquare, SquareRootOfzSquare;
+    z.realPart = x;
+    z.imagPart = y;
+    zSquare = squareComplex(z);
+    SquareRootOfzSquare = squareRootComplex(zSquare);
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(SquareRootOfzSquare.realPart-x) < errorTolerance);
+    assert(fabs(SquareRootOfzSquare.imagPart-y) < errorTolerance);
+}
+
+void complexCubeExample1(){
+    long double xCube, yCube;
+    customComplex z, zCube;
+    z.realPart = 2*sqrt(3) + 1;
+    z.imagPart = 2;
+    zCube = cubeComplex(z);
+    xCube = 25 + 6*sqrt(3);
+    yCube = 70 + 24*sqrt(3);
+    long double errorTolerance = powf(10.0000, -14.0000);
+    assert(fabs(zCube.realPart - xCube) < errorTolerance);
+    assert(fabs(zCube.imagPart - yCube) < errorTolerance);
+}
+
+void complexCubeExample2(){
+    long double xCube, yCube;
+    customComplex z, zCube;
+    z.realPart = 3*sqrt(3) + 2;
+    z.imagPart = 3;
+    zCube = cubeComplex(z);
+    xCube = 116 + 36*sqrt(3);
+    yCube = 252 + 108*sqrt(3);
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(zCube.realPart - xCube) < errorTolerance);
+    assert(fabs(zCube.imagPart - yCube) < errorTolerance);
+}
+
+void complexCubeExample3(){
+    long double xCube, yCube;
+    customComplex z, zCube;
+    z.realPart = 5*sqrt(3) + 12;
+    z.imagPart = 5;
+    zCube = cubeComplex(z);
+    xCube = 3528 + 2160*sqrt(3);
+    yCube = 3160 + 1800*sqrt(3);
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(zCube.realPart - xCube) < errorTolerance);
+    assert(fabs(zCube.imagPart - yCube) < errorTolerance);
+}
+
 int main(){
     squareComplexExample1();
     squareComplexExample2();
+    squareComplexExample3();
+    squareComplexExample4();
+    squareRootExample1();
+    squareRootExample2();
+    squareRootExample3();
+    squareRootExample4();
+    squareRootExample5();
+    complexCubeExample1();
+    complexCubeExample2();
+    complexCubeExample3();
     return 0;
 }
