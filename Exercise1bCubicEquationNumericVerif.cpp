@@ -42,12 +42,55 @@ customComplex cubeComplex(customComplex inputComplex){
     return zCube;
 }
 
-customComplex numericalCubeRootComplex(customComplex inputComplex){
-    long double xA, yA, xCubeRoot, yCubeRoot;
+customComplex cubeRootComplex(customComplex inputComplex){
+    long double xA, yA, absZcubeRootA, phiA, phiCubeRootA;
     customComplex zCubeRoot;
     xA = inputComplex.realPart;
     yA = inputComplex.imagPart;
-    
+    absZcubeRootA = powl(xA*xA + yA*yA, 1.0000/6.0000);
+    phiA = atan2(yA, xA);
+    phiCubeRootA = 1.0000/3.0000*phiA;
+    zCubeRoot.realPart = absZcubeRootA*cos(phiCubeRootA);
+    zCubeRoot.imagPart = absZcubeRootA*sin(phiCubeRootA);
+    return zCubeRoot;
+}
+
+bool cubicEquationRootMainVerifHandle(customComplex bCoeff, customComplex cCoeff){
+    customComplex bCoeffCube = cubeComplex(bCoeff);
+    customComplex cCoeffSquare = squareComplex(cCoeff);
+    long double discrimRealPart, discrimImagPart;
+    discrimRealPart = 1.0000/4.0000*cCoeffSquare.realPart + 1.0000/27.0000*bCoeffCube.realPart;
+    discrimImagPart = 1.0000/4.0000*cCoeffSquare.imagPart + 1.0000/27.0000*bCoeffCube.imagPart;
+    customComplex discrimCubicEquation, sqrtDiscrimCubicEquation;
+    discrimCubicEquation.realPart = discrimRealPart;
+    discrimCubicEquation.imagPart = discrimImagPart;
+    sqrtDiscrimCubicEquation = squareRootComplex(discrimCubicEquation);
+    customComplex alphaCubeCoeff, betaCubeCoeff, alphaCoeff, betaCoeff;
+    alphaCubeCoeff.realPart = -1.0000/2.0000*cCoeff.realPart + sqrtDiscrimCubicEquation.realPart;
+    alphaCubeCoeff.imagPart = -1.0000/2.0000*cCoeff.imagPart + sqrtDiscrimCubicEquation.imagPart;
+    betaCubeCoeff.realPart = -1.0000/2.0000*cCoeff.realPart - sqrtDiscrimCubicEquation.realPart;
+    betaCubeCoeff.imagPart = -1.0000/2.0000*cCoeff.imagPart - sqrtDiscrimCubicEquation.imagPart;
+    alphaCoeff = cubeRootComplex(alphaCubeCoeff);
+    betaCoeff = cubeRootComplex(betaCubeCoeff);
+    customComplex root1CubicEquation, cubeOfRoot1CubicEquation, verifRoot1CubicEquation;
+    long double absRoot1CubicEquation;
+    root1CubicEquation.realPart = alphaCoeff.realPart + betaCoeff.realPart;
+    root1CubicEquation.imagPart = alphaCoeff.imagPart + betaCoeff.imagPart;
+    cubeOfRoot1CubicEquation = cubeComplex(root1CubicEquation);
+    verifRoot1CubicEquation.realPart = cubeOfRoot1CubicEquation.realPart
+                                        + bCoeffCube.realPart*root1CubicEquation.realPart
+                                        - bCoeffCube.imagPart*root1CubicEquation.imagPart
+                                        + cCoeff.realPart;
+    verifRoot1CubicEquation.imagPart = cubeOfRoot1CubicEquation.realPart
+                                        + bCoeffCube.realPart*root1CubicEquation.imagPart
+                                        + bCoeffCube.imagPart*root1CubicEquation.realPart
+                                        + cCoeff.imagPart;
+    absRoot1CubicEquation = sqrt(
+        verifRoot1CubicEquation.realPart*verifRoot1CubicEquation.realPart
+        + verifRoot1CubicEquation.imagPart*verifRoot1CubicEquation.imagPart
+        );
+    cout << "|p(z1)| = " << absRoot1CubicEquation << endl;
+    return true;
 }
 
 void squareComplexExample1(){
@@ -232,6 +275,118 @@ void complexCubeExample3(){
     assert(fabs(zCube.imagPart - yCube) < errorTolerance);
 }
 
+void complexCubeRootExample1(){
+    random_device seedGen;
+    mt19937 merseenTwisterGen(seedGen());
+    uniform_real_distribution<> dataGenUniformHist(0.0001, 1.4999);
+    long double xDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double yDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double xRetrieve, yRetrieve;
+    customComplex zTarget, zCubeRootTarget, zRetrieve;
+    zTarget.realPart = xDatum;
+    zTarget.imagPart = yDatum;
+    zCubeRootTarget = cubeRootComplex(zTarget);
+    zRetrieve = cubeComplex(zCubeRootTarget);
+    xRetrieve = zRetrieve.realPart;
+    yRetrieve = zRetrieve.imagPart;
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(xRetrieve - xDatum) < errorTolerance);
+    assert(fabs(yRetrieve - yDatum) < errorTolerance);
+}
+
+void complexCubeRootExample2(){
+    random_device seedGen;
+    mt19937 merseenTwisterGen(seedGen());
+    uniform_real_distribution<> dataGenUniformHist(0.0001, 1.4999);
+    long double xDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double yDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double xRetrieve, yRetrieve;
+    customComplex zTarget, zCubeRootTarget, zRetrieve;
+    zTarget.realPart = xDatum;
+    zTarget.imagPart = yDatum;
+    zCubeRootTarget = cubeRootComplex(zTarget);
+    zRetrieve = cubeComplex(zCubeRootTarget);
+    xRetrieve = zRetrieve.realPart;
+    yRetrieve = zRetrieve.imagPart;
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(xRetrieve - xDatum) < errorTolerance);
+    assert(fabs(yRetrieve - yDatum) < errorTolerance);
+}
+
+void complexCubeRootExample3(){
+    random_device seedGen;
+    mt19937 merseenTwisterGen(seedGen());
+    uniform_real_distribution<> dataGenUniformHist(0.0001, 1.4999);
+    long double xDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double yDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double xRetrieve, yRetrieve;
+    customComplex zTarget, zCubeRootTarget, zRetrieve;
+    zTarget.realPart = xDatum;
+    zTarget.imagPart = yDatum;
+    zCubeRootTarget = cubeRootComplex(zTarget);
+    zRetrieve = cubeComplex(zCubeRootTarget);
+    xRetrieve = zRetrieve.realPart;
+    yRetrieve = zRetrieve.imagPart;
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(xRetrieve - xDatum) < errorTolerance);
+    assert(fabs(yRetrieve - yDatum) < errorTolerance);
+}
+
+void complexCubeRootExample4(){
+    random_device seedGen;
+    mt19937 merseenTwisterGen(seedGen());
+    uniform_real_distribution<> dataGenUniformHist(0.0001, 1.4999);
+    long double xDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double yDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double xRetrieve, yRetrieve;
+    customComplex zTarget, zCubeRootTarget, zRetrieve;
+    zTarget.realPart = xDatum;
+    zTarget.imagPart = yDatum;
+    zCubeRootTarget = cubeRootComplex(zTarget);
+    zRetrieve = cubeComplex(zCubeRootTarget);
+    xRetrieve = zRetrieve.realPart;
+    yRetrieve = zRetrieve.imagPart;
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(xRetrieve - xDatum) < errorTolerance);
+    assert(fabs(yRetrieve - yDatum) < errorTolerance);
+}
+
+void complexCubeRootExample5(){
+    random_device seedGen;
+    mt19937 merseenTwisterGen(seedGen());
+    uniform_real_distribution<> dataGenUniformHist(0.0001, 1.4999);
+    long double xDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double yDatum = static_cast<long double>(dataGenUniformHist(merseenTwisterGen));
+    long double xRetrieve, yRetrieve;
+    customComplex zTarget, zCubeRootTarget, zRetrieve;
+    zTarget.realPart = xDatum;
+    zTarget.imagPart = yDatum;
+    zCubeRootTarget = cubeRootComplex(zTarget);
+    zRetrieve = cubeComplex(zCubeRootTarget);
+    xRetrieve = zRetrieve.realPart;
+    yRetrieve = zRetrieve.imagPart;
+    long double errorTolerance = powf(10.0000, -12.0000);
+    assert(fabs(xRetrieve - xDatum) < errorTolerance);
+    assert(fabs(yRetrieve - yDatum) < errorTolerance);
+}
+
+void cubicEquationVerificationExample1(){
+    random_device seedGen;
+    mt19937 merseenTwisterGen(seedGen());
+    uniform_real_distribution<> coeffRealRandomHistogram(0.0001, 9.9999);
+    long double bReal, bImag, cReal, cImag;
+    customComplex bCoeff, cCoeff;
+    bReal = -5.0000 + coeffRealRandomHistogram(merseenTwisterGen);
+    bImag = -5.0000 + coeffRealRandomHistogram(merseenTwisterGen);
+    cReal = -5.0000 + coeffRealRandomHistogram(merseenTwisterGen);
+    cImag = -5.0000 + coeffRealRandomHistogram(merseenTwisterGen);
+    bCoeff.realPart = bReal;
+    bCoeff.imagPart = bImag;
+    cCoeff.realPart = cReal;
+    cCoeff.imagPart = cImag;
+    assert(cubicEquationRootMainVerifHandle(bCoeff, cCoeff));
+}
+
 int main(){
     squareComplexExample1();
     squareComplexExample2();
@@ -245,5 +400,11 @@ int main(){
     complexCubeExample1();
     complexCubeExample2();
     complexCubeExample3();
+    complexCubeRootExample1();
+    complexCubeRootExample2();
+    complexCubeRootExample3();
+    complexCubeRootExample4();
+    complexCubeRootExample5();
+    cubicEquationVerificationExample1();
     return 0;
 }
